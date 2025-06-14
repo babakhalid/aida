@@ -58,7 +58,7 @@ export function DialogPublish({ agent }: DialogPublishProps) {
   const shareOnX = () => {
     setOpenDialog(false)
 
-    const X_TEXT = `Check out this public page I created with Zola! ${publicLink}`
+    const X_TEXT = `Check out this public page I created with AIDA! ${publicLink}`
     window.open(`https://x.com/intent/tweet?text=${X_TEXT}`, "_blank")
   }
 

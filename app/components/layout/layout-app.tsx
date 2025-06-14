@@ -3,10 +3,13 @@
 import { Header } from "@/app/components/layout/header"
 import { AppSidebar } from "@/app/components/layout/sidebar/app-sidebar"
 import { useUserPreferences } from "@/app/providers/user-preferences-provider"
+import { useUser } from "@/app/providers/user-provider"
 
 export function LayoutApp({ children }: { children: React.ReactNode }) {
   const { preferences } = useUserPreferences()
-  const hasSidebar = preferences.layout === "sidebar"
+  const { user } = useUser()
+  const isAuthenticated = !!user
+  const hasSidebar = isAuthenticated // Show sidebar only when authenticated
 
   return (
     <div className="bg-background flex h-dvh w-full overflow-hidden">

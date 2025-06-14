@@ -14,6 +14,7 @@ import {
   Notepad,
   PaintBrush,
   Sparkle,
+  Calendar,
 } from "@phosphor-icons/react/dist/ssr"
 import { openproviders, OpenProvidersOptions } from "./openproviders"
 import { SupportedModel } from "./openproviders/types"
@@ -22,7 +23,7 @@ export const NON_AUTH_DAILY_MESSAGE_LIMIT = 5
 export const AUTH_DAILY_MESSAGE_LIMIT = 1000
 export const REMAINING_QUERY_ALERT_THRESHOLD = 2
 export const DAILY_FILE_UPLOAD_LIMIT = 5
-export const DAILY_SPECIAL_AGENT_LIMIT = 2
+export const DAILY_SPECIAL_AGENT_LIMIT = 100
 export const DAILY_LIMIT_PRO_MODELS = 5
 
 export type Model = {
@@ -39,194 +40,7 @@ export type Model = {
 }
 
 export const MODELS_FREE = [
-  {
-    id: "deepseek-r1",
-    name: "DeepSeek R1",
-    provider: "openrouter",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-      {
-        id: "reasoning",
-        enabled: true,
-      },
-      {
-        id: "tool-use",
-        enabled: false,
-      },
-    ],
-    creator: "deepseek",
-    api_sdk: "deepseek/deepseek-r1:free", // this is a special case for openrouter
-    description:
-      "A reasoning-first model trained with reinforcement learning, built for math, code, and complex problem solving",
-    icon: DeepSeek,
-  },
-  {
-    id: "pixtral-large-latest",
-    name: "Pixtral Large",
-    provider: "mistral",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-      {
-        id: "tool-use",
-        enabled: true,
-      },
-    ],
-    creator: "mistral",
-    api_sdk: openproviders("pixtral-large-latest"),
-    description:
-      "Mistral’s flagship model. Great for reasoning, writing, and advanced tasks.",
-    icon: Mistral,
-  },
-  {
-    id: "mistral-large-latest",
-    name: "Mistral Large",
-    provider: "mistral",
-    features: [
-      {
-        id: "file-upload",
-        enabled: false,
-      },
-      {
-        id: "tool-use",
-        enabled: true,
-      },
-    ],
-    creator: "mistral",
-    api_sdk: openproviders("mistral-large-latest"),
-    description:
-      "Fine-tuned for chat. A lighter, faster option for everyday use.",
-    icon: Mistral,
-  },
-  {
-    id: "gpt-4.1-nano",
-    name: "GPT-4.1 Nano",
-    provider: "openai",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-      {
-        id: "tool-use",
-        enabled: true,
-      },
-    ],
-    creator: "openai",
-    api_sdk: openproviders("gpt-4.1-nano"),
-    description:
-      "Ultra fast and cheap. Ideal for simple tasks, summaries, or classification.",
-    icon: OpenAI,
-  },
-]
-
-export const MODELS_PRO = [
-  {
-    id: "gpt-4.1",
-    name: "GPT-4.1",
-    provider: "openai",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-      {
-        id: "tool-use",
-        enabled: true,
-      },
-    ],
-    creator: "openai",
-    api_sdk: openproviders("gpt-4.1"),
-    description:
-      "OpenAI’s most powerful model. Excellent at coding, writing, and complex tasks.",
-    icon: OpenAI,
-  },
-  {
-    id: "gpt-4.1-mini",
-    name: "GPT-4.1 Mini",
-    provider: "openai",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-      {
-        id: "tool-use",
-        enabled: true,
-      },
-    ],
-    creator: "openai",
-    api_sdk: openproviders("gpt-4.1-mini"),
-    description:
-      "Fast and smart — a great balance for most tasks. Outperforms GPT‑4o mini.",
-    icon: OpenAI,
-  },
-  {
-    id: "gemini-2.5-pro-preview-03-25",
-    name: "Gemini 2.5 Pro",
-    provider: "gemini",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "google",
-    api_sdk: openproviders("gemini-2.5-pro-exp-03-25"),
-    description: "Advanced reasoning, coding, and multimodal understanding.",
-    icon: Gemini,
-  },
-  {
-    id: "gemini-2.0-flash-001",
-    name: "Gemini 2.0 Flash",
-    provider: "gemini",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "google",
-    api_sdk: openproviders("gemini-2.0-flash-001"),
-    description: "Fast and cost-efficient with streaming and real-time output.",
-    icon: Gemini,
-  },
-  {
-    id: "gemini-1.5-pro",
-    name: "Gemini 1.5 Pro",
-    provider: "gemini",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "google",
-    api_sdk: openproviders("gemini-1.5-pro"),
-    description: "Smart general-purpose model for complex reasoning tasks.",
-    icon: Gemini,
-  },
-  {
-    id: "gemini-1.5-flash",
-    name: "Gemini 1.5 Flash",
-    provider: "gemini",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "google",
-    api_sdk: openproviders("gemini-1.5-flash"),
-    description: "Balanced speed and quality, great for a variety of tasks.",
-    icon: Gemini,
-  },
-  {
+   {
     id: "claude-3-7-sonnet-20250219",
     name: "Claude 3.7 Sonnet",
     provider: "anthropic",
@@ -235,43 +49,15 @@ export const MODELS_PRO = [
         id: "file-upload",
         enabled: true,
       },
+      {
+        id: "tool-use",
+        enabled: true,
+      },
     ],
     creator: "anthropic",
     api_sdk: openproviders("claude-3-7-sonnet-20250219"),
     description:
-      "Anthropic’s most intelligent model. Excels at step-by-step reasoning and complex tasks.",
-    icon: Claude,
-  },
-  {
-    id: "claude-3-5-haiku-20241022",
-    name: "Claude 3.5 Haiku",
-    provider: "anthropic",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "anthropic",
-    api_sdk: openproviders("claude-3-5-haiku-20241022"),
-    description:
-      "Fastest and most cost-effective Claude model. Ideal for quick, everyday tasks.",
-    icon: Claude,
-  },
-  {
-    id: "claude-3-opus-20240229",
-    name: "Claude 3 Opus",
-    provider: "anthropic",
-    features: [
-      {
-        id: "file-upload",
-        enabled: true,
-      },
-    ],
-    creator: "anthropic",
-    api_sdk: openproviders("claude-3-opus-20240229"),
-    description:
-      "Anthropic’s most powerful model for highly complex reasoning and generation tasks.",
+      "Anthropic's most intelligent model. Excels at step-by-step reasoning and complex tasks.",
     icon: Claude,
   },
   {
@@ -295,47 +81,46 @@ export const MODELS_PRO = [
     icon: Grok,
   },
   {
-    id: "grok-3-mini",
-    name: "Grok 3 Mini",
-    provider: "xai",
+    id: "gpt-4o",
+    name: "GPT-4o",
+    provider: "openai",
     features: [
       {
         id: "file-upload",
-        enabled: false,
+        enabled: true,
       },
       {
         id: "tool-use",
         enabled: true,
       },
-      {
-        id: "reasoning",
-        enabled: true,
-      },
     ],
-    creator: "xai",
-    api_sdk: openproviders("grok-3-mini"),
+    creator: "openai",
+    api_sdk: openproviders("gpt-4o"),
     description:
-      "Lightweight model that thinks before responding, fast and smart for logic-based tasks without requiring deep domain knowledge",
-    icon: Grok,
+      "OpenAI's flagship model with multimodal capabilities. Excellent at coding, writing, and complex tasks.",
+    icon: OpenAI,
   },
+]
+
+export const MODELS_PRO = [
   {
-    id: "grok-3-fast",
-    name: "Grok 3 Fast",
-    provider: "xai",
+    id: "gemini-2.5-pro-preview-03-25",
+    name: "Gemini 2.5 Pro",
+    provider: "gemini",
     features: [
       {
         id: "file-upload",
-        enabled: false,
+        enabled: true,
       },
       {
         id: "tool-use",
         enabled: true,
       },
     ],
-    creator: "xai",
-    api_sdk: openproviders("grok-3-fast"),
-    description: "Increased speed at a higher cost per output token.",
-    icon: Grok,
+    creator: "google",
+    api_sdk: openproviders("gemini-2.5-pro-exp-03-25"),
+    description: "Advanced reasoning, coding, and multimodal understanding.",
+    icon: Gemini,
   },
 ]
 
@@ -391,109 +176,175 @@ export const PROVIDERS = [
   },
 ] as Provider[]
 
-export const MODEL_DEFAULT = "gpt-4.1-nano"
+export const MODEL_DEFAULT = "claude-3-7-sonnet-20250219"
 
-export const APP_NAME = "Zola"
-export const APP_DOMAIN = "https://zola.chat"
+export const APP_NAME = "AIDA"
+export const APP_DOMAIN = "https://aida.chat"
 export const APP_DESCRIPTION =
-  "Zola is a free, open-source AI chat app with multi-model support."
+  "AIDA is a free, open-source AI chat app with multi-model support."
 
 export const SUGGESTIONS = [
   {
-    label: "Summary",
-    highlight: "Summarize",
-    prompt: `Summarize`,
+    label: "Education",
+    highlight: "Education",
+    prompt: `Education`,
     items: [
-      "Summarize the French Revolution",
-      "Summarize the plot of Inception",
-      "Summarize World War II in 5 sentences",
-      "Summarize the benefits of meditation",
-    ],
-    icon: Notepad,
-  },
-  {
-    label: "Code",
-    highlight: "Help me",
-    prompt: `Help me`,
-    items: [
-      "Help me write a function to reverse a string in JavaScript",
-      "Help me create a responsive navbar in HTML/CSS",
-      "Help me write a SQL query to find duplicate emails",
-      "Help me convert this Python function to JavaScript",
-    ],
-    icon: Code,
-  },
-  {
-    label: "Design",
-    highlight: "Design",
-    prompt: `Design`,
-    items: [
-      "Design a color palette for a tech blog",
-      "Design a UX checklist for mobile apps",
-      "Design 5 great font pairings for a landing page",
-      "Design better CTAs with useful tips",
-    ],
-    icon: PaintBrush,
-  },
-  {
-    label: "Research",
-    highlight: "Research",
-    prompt: `Research`,
-    items: [
-      "Research the pros and cons of remote work",
-      "Research the differences between Apple Vision Pro and Meta Quest",
-      "Research best practices for password security",
-      "Research the latest trends in renewable energy",
+      "What are the academic policies for student assessment?",
+      "How do I register for courses at UM6P?",
+      "What is the grading policy for undergraduate programs?",
+      "How to report academic misconduct or plagiarism?",
     ],
     icon: BookOpenText,
   },
   {
-    label: "Get inspired",
-    highlight: "Inspire me",
-    prompt: `Inspire me`,
+    label: "Research",
+    highlight: "Research", 
+    prompt: `Research`,
     items: [
-      "Inspire me with a beautiful quote about creativity",
-      "Inspire me with a writing prompt about solitude",
-      "Inspire me with a poetic way to start a newsletter",
-      "Inspire me by describing a peaceful morning in nature",
-    ],
-    icon: Sparkle,
-  },
-  {
-    label: "Think deeply",
-    highlight: "Reflect on",
-    prompt: `Reflect on`,
-    items: [
-      "Reflect on why we fear uncertainty",
-      "Reflect on what makes a conversation meaningful",
-      "Reflect on the concept of time in a simple way",
-      "Reflect on what it means to live intentionally",
+      "Research the latest developments in renewable energy technologies",
+      "Find academic papers on artificial intelligence in healthcare",
+      "What are UM6P's research collaboration policies?",
+      "Search for funding opportunities for PhD research projects",
     ],
     icon: Brain,
   },
   {
-    label: "Learn gently",
-    highlight: "Explain",
-    prompt: `Explain`,
+    label: "Operations",
+    highlight: "Operations",
+    prompt: `Operations`,
     items: [
-      "Explain quantum physics like I'm 10",
-      "Explain stoicism in simple terms",
-      "Explain how a neural network works",
-      "Explain the difference between AI and AGI",
+      "Create a purchase order for research equipment worth 10,000 USD",
+      "Book a tennis court for faculty recreation tomorrow at 4 PM",
+      "What is the procedure for reporting workplace harassment?",
+      "Submit a purchase order for laboratory supplies and chemicals",
+    ],
+    icon: Code,
+  },
+  {
+    label: "Entrepreneurship",
+    highlight: "Entrepreneurship",
+    prompt: `Entrepreneurship`,
+    items: [
+      "What support does UM6P provide for student startups?",
+      "How to access the university's innovation incubator program?",
+      "What are the policies for commercializing university research?",
+      "Book a meeting room for startup pitch presentation",
     ],
     icon: Lightbulb,
   },
 ]
 
-export const SYSTEM_PROMPT_DEFAULT = `You are Zola, a thoughtful and clear assistant. Your tone is calm, minimal, and human. You write with intention—never too much, never too little. You avoid clichés, speak simply, and offer helpful, grounded answers. When needed, you ask good questions. You don’t try to impress—you aim to clarify. You may use metaphors if they bring clarity, but you stay sharp and sincere. You're here to help the user think clearly and move forward, not to overwhelm or overperform.`
+export const SYSTEM_PROMPT_DEFAULT = `You are AIDA, a thoughtful and clear assistant. Your tone is calm, minimal, and human. You write with intention—never too much, never too little. You avoid clichés, speak simply, and offer helpful, grounded answers. When needed, you ask good questions. You don't try to impress—you aim to clarify. You may use metaphors if they bring clarity, but you stay sharp and sincere. You're here to help the user think clearly and move forward, not to overwhelm or overperform.`
 
 export const MESSAGE_MAX_LENGTH = 4000
 
 export const CURATED_AGENTS_SLUGS = [
   "github/ibelick/prompt-kit",
-  "github/ibelick/zola",
+  "github/ibelick/aida",
   "github/shadcn/ui",
   "research",
   "tweet-vibe-checker",
   "blog-draft",
+  "sport-booking",
+  "sap-operations",
+  "policy-assistant",
 ]
+
+// Enhanced agent selection logic based on user prompt analysis
+export function selectBestAgent(prompt: string): string | null {
+  const lowerPrompt = prompt.toLowerCase()
+  
+  // Purchase/procurement/SAP related
+  if (lowerPrompt.includes('purchase') || lowerPrompt.includes('order') || 
+      lowerPrompt.includes('buy') || lowerPrompt.includes('procurement') ||
+      lowerPrompt.includes('achat') || lowerPrompt.includes('demande') ||
+      lowerPrompt.includes('sap') || lowerPrompt.includes('expense') ||
+      lowerPrompt.includes('vendor') || lowerPrompt.includes('payment')) {
+    return 'sap-operations'
+  }
+  
+  // Sport/booking related
+  if (lowerPrompt.includes('book') || lowerPrompt.includes('court') || 
+      lowerPrompt.includes('sport') || lowerPrompt.includes('tennis') ||
+      lowerPrompt.includes('basketball') || lowerPrompt.includes('swimming') ||
+      lowerPrompt.includes('pool') || lowerPrompt.includes('gym') ||
+      lowerPrompt.includes('badminton') || lowerPrompt.includes('reserve')) {
+    return 'sport-booking'
+  }
+  
+  // Policy/academic/HR related
+  if (lowerPrompt.includes('policy') || lowerPrompt.includes('rule') || 
+      lowerPrompt.includes('regulation') || lowerPrompt.includes('academic') ||
+      lowerPrompt.includes('student') || lowerPrompt.includes('course') ||
+      lowerPrompt.includes('grade') || lowerPrompt.includes('assessment') ||
+      lowerPrompt.includes('vacation') || lowerPrompt.includes('leave') ||
+      lowerPrompt.includes('hr') || lowerPrompt.includes('workplace')) {
+    return 'policy-assistant'
+  }
+  
+  // Research related
+  if (lowerPrompt.includes('research') || lowerPrompt.includes('study') || 
+      lowerPrompt.includes('paper') || lowerPrompt.includes('publication') ||
+      lowerPrompt.includes('journal') || lowerPrompt.includes('find studies') ||
+      lowerPrompt.includes('latest developments') || lowerPrompt.includes('summarize')) {
+    return 'research'
+  }
+  
+  // Writing/content related
+  if (lowerPrompt.includes('write') || lowerPrompt.includes('essay') || 
+      lowerPrompt.includes('blog') || lowerPrompt.includes('draft') ||
+      lowerPrompt.includes('outline') || lowerPrompt.includes('article')) {
+    return 'blog-draft'
+  }
+  
+  // Social media/tweet related
+  if (lowerPrompt.includes('tweet') || lowerPrompt.includes('twitter') || 
+      lowerPrompt.includes('social media') || lowerPrompt.includes('post') ||
+      lowerPrompt.includes('vibe') || lowerPrompt.includes('tone')) {
+    return 'tweet-vibe-checker'
+  }
+  
+  // Email/communication related
+  if (lowerPrompt.includes('email') || lowerPrompt.includes('message') || 
+      lowerPrompt.includes('communication') || lowerPrompt.includes('respond') ||
+      lowerPrompt.includes('reply') || lowerPrompt.includes('professional')) {
+    return 'inbox-fix'
+  }
+  
+  // Product/UX related
+  if (lowerPrompt.includes('ux') || lowerPrompt.includes('copy') || 
+      lowerPrompt.includes('interface') || lowerPrompt.includes('user') ||
+      lowerPrompt.includes('product') || lowerPrompt.includes('ui')) {
+    return 'clear-ux-copywriter'
+  }
+  
+  // Naming/branding related
+  if (lowerPrompt.includes('name') || lowerPrompt.includes('brand') || 
+      lowerPrompt.includes('suggest') || lowerPrompt.includes('domain') ||
+      lowerPrompt.includes('company name') || lowerPrompt.includes('product name')) {
+    return 'name-vibe-check'
+  }
+  
+  // Startup/business strategy related
+  if (lowerPrompt.includes('startup') || lowerPrompt.includes('business') || 
+      lowerPrompt.includes('validate') || lowerPrompt.includes('strategy') ||
+      lowerPrompt.includes('product idea') || lowerPrompt.includes('0 to 1')) {
+    return '0-to-1-advisor'
+  }
+  
+  // Code review related
+  if (lowerPrompt.includes('review') || lowerPrompt.includes('code') || 
+      lowerPrompt.includes('pull request') || lowerPrompt.includes('pr') ||
+      lowerPrompt.includes('security') || lowerPrompt.includes('best practices')) {
+    return 'pull-check'
+  }
+  
+  // Creative/ideation related
+  if (lowerPrompt.includes('creative') || lowerPrompt.includes('brainstorm') || 
+      lowerPrompt.includes('idea') || lowerPrompt.includes('innovation') ||
+      lowerPrompt.includes('explore') || lowerPrompt.includes('possibility')) {
+    return 'eloi'
+  }
+  
+  return null // Use master orchestrator for selection
+}

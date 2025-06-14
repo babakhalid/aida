@@ -59,17 +59,17 @@ export function ProModelDialog({
       </div>
 
       <div className="px-6 pt-4 text-center text-lg leading-tight font-medium">
-        This model is Pro-only on Zola
+        This model is Pro-only on AIDA
       </div>
 
       <div className="flex-grow overflow-y-auto">
         <div className="px-6 py-4">
           <p className="text-muted-foreground text-sm">
-            Zola is free and open-source. Some models require self-hosted
+            AIDA is free and open-source. Some models require self-hosted
             access.
           </p>
           <p className="text-muted-foreground mt-1 text-sm">
-            If you want to use this model, you can fork Zola and add your own
+            If you want to use this model, you can fork AIDA and add your own
             key. Or let us know you want access.
           </p>
 

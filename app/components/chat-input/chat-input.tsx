@@ -188,7 +188,7 @@ export function ChatInput({
           />
           <FileList files={files} onFileRemove={onFileRemove} />
           <PromptInputTextarea
-            placeholder={"Ask Zola or @mention an agent"}
+            placeholder={"Ask AIDA or @mention an agent"}
             onKeyDown={handleKeyDown}
             className="min-h-[44px] pt-3 pl-4 text-base leading-[1.3] sm:text-base md:text-base"
             ref={agentCommand.textareaRef}

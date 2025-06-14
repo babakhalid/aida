@@ -9,7 +9,7 @@ type UserPreferences = {
 }
 
 const defaultPreferences: UserPreferences = {
-  layout: "fullscreen",
+  layout: "sidebar",
 }
 
 const PREFERENCES_STORAGE_KEY = "user-preferences"

@@ -1,5 +1,5 @@
 // lib/agents/tools/plan-search-queries.ts
-import { openai } from "@ai-sdk/openai"
+import { anthropic } from "@ai-sdk/anthropic"
 import { generateObject } from "ai"
 import { z } from "zod"
 
@@ -8,7 +8,7 @@ export async function planSearchQueries(input: {
 }): Promise<{ result: string[] }> {
   try {
     const { object } = await generateObject({
-      model: openai("gpt-4.1-nano", { structuredOutputs: true }),
+      model: anthropic("claude-3-7-sonnet-20250219"),
       schema: z.object({ queries: z.array(z.string()) }),
       prompt: `Generate exactly 3 search queries for "${input.prompt}" that would make good H2 sections.`,
     })

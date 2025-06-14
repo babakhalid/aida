@@ -3,7 +3,6 @@
 import { HistoryTrigger } from "@/app/components/history/history-trigger"
 import { AppInfoTrigger } from "@/app/components/layout/app-info/app-info-trigger"
 import { ButtonNewChat } from "@/app/components/layout/button-new-chat"
-import { UserMenu } from "@/app/components/layout/user-menu"
 import { useBreakpoint } from "@/app/hooks/use-breakpoint"
 import { useUser } from "@/app/providers/user-provider"
 import type { Agent } from "@/app/types/agent"
@@ -76,7 +75,6 @@ export function Header({ hasSidebar }: { hasSidebar: boolean }) {
               <ButtonNewChat />
               <AgentLink />
               {!isSidebarOpen && <HistoryTrigger hasSidebar={hasSidebar} />}
-              <UserMenu />
             </div>
           )}
         </div>

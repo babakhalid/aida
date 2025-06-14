@@ -2,6 +2,7 @@
 
 import { groupChatsByDate } from "@/app/components/history/utils"
 import { useBreakpoint } from "@/app/hooks/use-breakpoint"
+import { useUser } from "@/app/providers/user-provider"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Sidebar,
@@ -13,7 +14,6 @@ import {
 import { useChats } from "@/lib/chat-store/chats/provider"
 import {
   ChatTeardropText,
-  GithubLogo,
   MagnifyingGlass,
   X,
 } from "@phosphor-icons/react"
@@ -22,11 +22,13 @@ import { useParams } from "next/navigation"
 import { useMemo } from "react"
 import { HistoryTrigger } from "../../history/history-trigger"
 import { SidebarList } from "./sidebar-list"
+import { UserProfileMenu } from "./user-profile-menu"
 
 export function AppSidebar() {
   const isMobile = useBreakpoint(768)
   const { open, setOpenMobile } = useSidebar()
   const { chats, isLoading } = useChats()
+  const { user } = useUser()
   const params = useParams<{ chatId: string }>()
   const currentChatId = params.chatId
 
@@ -97,24 +99,13 @@ export function AppSidebar() {
         </ScrollArea>
       </SidebarContent>
       <SidebarFooter className="mb-2 p-3">
-        <a
-          href="https://github.com/ibelick/zola"
-          className="hover:bg-muted flex items-center gap-2 rounded-md p-2"
-          target="_blank"
-          aria-label="Star the repo on GitHub"
-        >
-          <div className="rounded-full border p-1">
-            <GithubLogo className="size-4" />
-          </div>
-          <div className="flex flex-col">
-            <div className="text-sidebar-foreground text-sm font-medium">
-              Zola is open source
-            </div>
-            <div className="text-sidebar-foreground/70 text-xs">
-              Star the repo on GitHub!
-            </div>
-          </div>
-        </a>
+        <UserProfileMenu 
+          user={user ? {
+            name: user.display_name || user.email || "User",
+            email: user.email || "",
+            avatar: user.profile_image || undefined
+          } : undefined}
+        />
       </SidebarFooter>
     </Sidebar>
   )

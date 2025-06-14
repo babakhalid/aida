@@ -13,6 +13,11 @@ import {
 } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import { BookingWizard } from "./booking-wizard"
+import { MathWidget } from "./math-widget"
+import { PurchaseRequestForm } from "./purchase-request-form"
+import { MasterAgentOrchestrator } from "./master-agent-orchestrator"
+import { logTool, logUI } from "@/lib/utils/logger"
 
 interface ToolInvocationProps {
   toolInvocations: ToolInvocationUIPart[]
@@ -30,7 +35,7 @@ export function ToolInvocation({
   toolInvocations,
   defaultOpen = false,
 }: ToolInvocationProps) {
-  const [isExpanded, setIsExpanded] = useState(defaultOpen)
+  const [isExpanded, setIsExpanded] = useState(true) // Always start expanded to show tools
 
   const toolInvocationsData = Array.isArray(toolInvocations)
     ? toolInvocations
@@ -52,6 +57,18 @@ export function ToolInvocation({
   const uniqueToolIds = Object.keys(groupedTools)
   const isSingleTool = uniqueToolIds.length === 1
 
+  // Check if we should render tools directly (for interactive tools)
+  const shouldRenderDirect = (toolName: string) => {
+    const directRenderTools = [
+      "createPurchaseOrder", 
+      "sapPurchaseOrder", 
+      "createPO",
+      "bookSportSession"
+    ]
+    return directRenderTools.includes(toolName)
+  }
+
+  // If single tool and should render directly, pass it to SingleToolView
   if (isSingleTool) {
     return (
       <SingleToolView
@@ -206,12 +223,23 @@ function SingleToolCard({
   defaultOpen?: boolean
   className?: string
 }) {
-  const [isExpanded, setIsExpanded] = useState(defaultOpen)
+  const [isExpanded, setIsExpanded] = useState(true) // Always start expanded to show tool details
   const [parsedResult, setParsedResult] = useState<any>(null)
   const [parseError, setParseError] = useState<string | null>(null)
 
   const { toolInvocation } = toolData
   const { state, toolName, toolCallId, args } = toolInvocation
+
+  // Log tool invocation lifecycle
+  useEffect(() => {
+    logTool('TOOL_INVOCATION_MOUNTED', { 
+      toolName, 
+      toolCallId, 
+      state, 
+      hasArgs: !!args,
+      defaultOpen 
+    })
+  }, [toolName, toolCallId, state, args, defaultOpen])
   const isLoading = state === "call"
   const isCompleted = state === "result"
   const result = isCompleted ? toolInvocation.result : undefined
@@ -297,9 +325,182 @@ function SingleToolCard({
       ))
     : null
 
+  // Check if this tool should render directly without collapse
+  const shouldRenderDirect = (toolName: string) => {
+    const directRenderTools = [
+      "createPurchaseOrder", 
+      "sapPurchaseOrder", 
+      "createPO",
+      "bookSportSession"
+    ]
+    return directRenderTools.includes(toolName)
+  }
+
+  // Render interactive tools directly
+  const renderDirectTool = () => {
+    // Handle booking wizard UI
+    if (toolName === "bookSportSession") {
+      return (
+        <BookingWizard 
+          result={parsedResult} 
+          parameters={args as any}
+        />
+      )
+    }
+
+    // Handle SAP purchase order creation
+    if (toolName === "createPurchaseOrder" || toolName === "sapPurchaseOrder" || toolName === "createPO") {
+      logTool('PURCHASE_REQUEST_UI_RENDERED', { toolName, hasResult: !!parsedResult, parameters: args })
+      return (
+        <PurchaseRequestForm 
+          result={parsedResult} 
+          parameters={args as any}
+        />
+      )
+    }
+
+    // Handle Master Agent Orchestrator
+    if (toolName === "orchestrateAgent" || toolName === "selectAgent" || (parsedResult && parsedResult.ui === "master-orchestrator")) {
+      logTool('MASTER_ORCHESTRATOR_UI_RENDERED', { toolName, hasResult: !!parsedResult, parameters: args })
+      
+      // Enhanced reasoning display
+      const orchestratorData = {
+        userPrompt: args?.userPrompt || args?.prompt || "",
+        selection: parsedResult?.selection || {
+          selectedAgent: null,
+          availableAgents: [],
+          reasoning: "Processing...",
+          confidence: 0,
+          requiresVerification: false,
+          analysisSteps: [],
+          finalDecision: "Analyzing request..."
+        },
+        steps: parsedResult?.steps || [],
+        reasoning: parsedResult?.reasoning || null,
+        autoTriggered: parsedResult?.autoTriggered || false,
+        triggeredAgent: parsedResult?.triggeredAgent || null,
+        isActive: !isCompleted
+      }
+      
+      return (
+        <div className="space-y-4">
+          <MasterAgentOrchestrator {...orchestratorData} />
+          
+          {/* Show detailed reasoning if available */}
+          {parsedResult?.reasoning && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-semibold text-blue-900 mb-3">🧠 Detailed Analysis</h4>
+              
+              {/* Confidence Level */}
+              <div className="mb-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-blue-700">Confidence Level</span>
+                  <span className="text-blue-700 font-medium">{parsedResult.reasoning.confidence}%</span>
+                </div>
+                <div className="w-full bg-blue-200 rounded-full h-2 mt-1">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${parsedResult.reasoning.confidence}%` }}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Analysis Steps */}
+              {parsedResult.reasoning.analysisSteps && (
+                <div className="mb-3">
+                  <span className="text-sm font-medium text-blue-800">Analysis Steps:</span>
+                  <ul className="mt-1 space-y-1">
+                    {parsedResult.reasoning.analysisSteps.map((step: string, index: number) => (
+                      <li key={index} className="text-sm text-blue-700 flex items-start gap-2">
+                        <span className="flex-shrink-0 w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center text-xs font-medium text-blue-800 mt-0.5">
+                          {index + 1}
+                        </span>
+                        {step}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {/* Selected Reason */}
+              <div className="mb-3">
+                <span className="text-sm font-medium text-blue-800">Decision Reasoning:</span>
+                <p className="text-sm text-blue-700 mt-1">{parsedResult.reasoning.selectedReason}</p>
+              </div>
+              
+              {/* Agent Suggestion */}
+              {parsedResult.suggestion && parsedResult.suggestion.action === "switch_to_agent" && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-green-600">💡</span>
+                        <span className="text-sm font-medium text-green-800">
+                          Suggested Agent: {parsedResult.suggestion.agentName}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-green-600">Confidence:</span>
+                          <span className="text-xs font-medium text-green-700">{parsedResult.suggestion.confidence}%</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-green-700 mb-3">
+                        {parsedResult.suggestion.reasoning}
+                      </p>
+                      <div className="flex gap-2">
+                        <button 
+                          className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition-colors"
+                          onClick={() => window.location.href = `/c/${window.location.pathname.split('/c/')[1]?.split('?')[0] || ''}?agent=${parsedResult.suggestion.agentSlug}`}
+                        >
+                          Switch to {parsedResult.suggestion.agentName}
+                        </button>
+                        <button 
+                          className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-200 transition-colors"
+                          onClick={() => {
+                            // Copy @mention to clipboard
+                            navigator.clipboard.writeText(`@${parsedResult.suggestion.agentSlug} `)
+                          }}
+                        >
+                          Copy @{parsedResult.suggestion.agentSlug}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    return null
+  }
+
+  // If this is a direct render tool, show it immediately
+  if (shouldRenderDirect(toolName)) {
+    return (
+      <div className="mb-6">
+        {renderDirectTool()}
+      </div>
+    )
+  }
+
   // Render generic results based on their structure
   const renderResults = () => {
     if (!parsedResult) return "No result data available"
+
+    // Handle comprehensive math widget for ANY mathematical operations
+    if ((toolName.includes("math") || toolName.includes("calc") || toolName.includes("equation") || 
+         toolName.includes("solve") || toolName.includes("algebra") || toolName.includes("geometry") ||
+         toolName === "calculate" || toolName === "compute") && typeof parsedResult === "object") {
+      return (
+        <MathWidget 
+          result={parsedResult} 
+          parameters={args as any}
+          toolName={toolName}
+        />
+      )
+    }
 
     // Handle array of items with url, title, and snippet (like search results)
     if (Array.isArray(parsedResult) && parsedResult.length > 0) {
@@ -398,7 +599,9 @@ function SingleToolCard({
       <button
         onClick={(e) => {
           e.preventDefault()
-          setIsExpanded(!isExpanded)
+          const newState = !isExpanded
+          logUI('TOOL_INVOCATION_TOGGLE', { toolName, toolCallId, expanded: newState })
+          setIsExpanded(newState)
         }}
         type="button"
         className="hover:bg-accent flex w-full flex-row items-center rounded-t-md px-3 py-2 transition-colors"

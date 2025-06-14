@@ -34,13 +34,33 @@ export async function fetchAndCacheMessages(chatId: string) {
     return []
   }
 
-  const formattedMessages = data.map((message) => ({
-    ...message,
-    id: String(message.id),
-    content: message.content ?? "",
-    createdAt: new Date(message.created_at || ""),
-    parts: (message?.parts as MessageAISDK["parts"]) || undefined,
-  }))
+  const formattedMessages = data.map((message) => {
+    // Sanitize parts to ensure tool calls have proper structure
+    let sanitizedParts = message?.parts as MessageAISDK["parts"]
+    
+    if (Array.isArray(sanitizedParts)) {
+      sanitizedParts = sanitizedParts.filter((part: any) => {
+        // Remove malformed tool calls that are missing input field
+        if (part?.type === 'tool-call' && part?.toolName && !part?.args) {
+          console.warn(`Filtering out malformed tool call: ${part.toolName} missing args`)
+          return false
+        }
+        if (part?.type === 'tool-use' && !part?.input) {
+          console.warn(`Filtering out malformed tool use missing input`)
+          return false
+        }
+        return true
+      })
+    }
+
+    return {
+      ...message,
+      id: String(message.id),
+      content: message.content ?? "",
+      createdAt: new Date(message.created_at || ""),
+      parts: sanitizedParts || undefined,
+    }
+  })
 
   return formattedMessages
 }

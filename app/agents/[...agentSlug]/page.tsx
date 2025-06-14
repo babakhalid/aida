@@ -13,14 +13,33 @@ export default async function AgentIdPage({
 
   const supabase = await createClient()
 
-  const { data: agent, error: agentError } = await supabase
+  const { data: agentResults, error: agentError } = await supabase
     .from("agents")
     .select("*")
     .eq("slug", agentSlug)
-    .single()
+    .eq("is_public", true)
+    .limit(1)
 
   if (agentError) {
     throw new Error(agentError.message)
+  }
+
+  const agent = agentResults?.[0]
+  if (!agent) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Agent Not Found</h1>
+          <p className="text-gray-600 mb-6">The agent "{agentSlug}" could not be found.</p>
+          <a 
+            href="/agents" 
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Browse all agents
+          </a>
+        </div>
+      </div>
+    )
   }
 
   const { data: agents, error: agentsError } = await supabase

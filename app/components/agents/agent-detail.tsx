@@ -154,10 +154,24 @@ export function AgentDetail({
 
         {(tools || mcp_config) && (
           <div className="mb-8 grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:px-8">
-            {tools && (
-              <div className="rounded-md border p-2">
-                <h3 className="mb-2 text-xs font-medium">Tools</h3>
-                <p className="text-muted-foreground text-xs">{tools}</p>
+            {tools && tools.length > 0 && (
+              <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+                <h3 className="mb-3 text-sm font-bold text-blue-800 flex items-center">
+                  🛠️ Interactive Tools Available
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {tools.map((tool, index) => (
+                    <span 
+                      key={index}
+                      className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold border border-blue-700"
+                    >
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-blue-700 mt-2 font-medium">
+                  ✨ This agent can provide interactive experiences!
+                </p>
               </div>
             )}
             {mcp_config && (

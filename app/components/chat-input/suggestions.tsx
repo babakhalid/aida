@@ -2,6 +2,7 @@
 
 import { PromptSuggestion } from "@/components/prompt-kit/prompt-suggestion"
 import { TRANSITION_SUGGESTIONS } from "@/lib/motion"
+import { CaretLeft } from "@phosphor-icons/react"
 import { AnimatePresence, motion } from "motion/react"
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import { SUGGESTIONS as SUGGESTIONS_CONFIG } from "../../../lib/config"
@@ -95,6 +96,11 @@ export const Suggestions = memo(function Suggestions({
     [handleCategoryClick]
   )
 
+  const handleBackToCategories = useCallback(() => {
+    setActiveCategory(null)
+    onValueChange("")
+  }, [onValueChange])
+
   const suggestionsList = useMemo(
     () => (
       <motion.div
@@ -110,6 +116,23 @@ export const Suggestions = memo(function Suggestions({
         }}
         transition={TRANSITION_SUGGESTIONS}
       >
+        {/* Back button */}
+        <MotionPromptSuggestion
+          onClick={handleBackToCategories}
+          className="mb-3 w-8 h-8 p-0 flex items-center justify-center rounded-full border border-neutral-200 bg-white hover:bg-neutral-50"
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={{
+            initial: { opacity: 0, y: -10 },
+            animate: { opacity: 1, y: 0 },
+            exit: { opacity: 0, y: 10 },
+          }}
+          transition={TRANSITION_SUGGESTIONS}
+        >
+          <CaretLeft className="size-4 text-neutral-600" />
+        </MotionPromptSuggestion>
+
         {activeCategoryData?.items.map((suggestion: string, index: number) => (
           <MotionPromptSuggestion
             key={`${activeCategoryData?.label}-${suggestion}-${index}`}
@@ -135,7 +158,7 @@ export const Suggestions = memo(function Suggestions({
         ))}
       </motion.div>
     ),
-    [handleSuggestionClick]
+    [handleSuggestionClick, handleBackToCategories, activeCategoryData]
   )
 
   return (
