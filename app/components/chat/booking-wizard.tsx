@@ -1,7 +1,7 @@
 "use client"
 
 import { Calendar, Check, CaretLeft, CaretRight, User, Envelope, Phone } from "@phosphor-icons/react"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { useState } from "react"
 
 interface BookingWizardProps {

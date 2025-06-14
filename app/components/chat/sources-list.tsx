@@ -49,7 +49,7 @@ const addUTM = (url: string) => {
 }
 
 const TRANSITION = {
-  type: "spring",
+  type: "spring" as const,
   duration: 0.2,
   bounce: 0,
 }

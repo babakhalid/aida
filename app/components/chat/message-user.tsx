@@ -84,7 +84,7 @@ export function MessageUser({
           {attachment.contentType?.startsWith("image") ? (
             <MorphingDialog
               transition={{
-                type: "spring",
+                type: "spring" as const,
                 stiffness: 280,
                 damping: 18,
                 mass: 0.3,

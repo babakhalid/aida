@@ -11,7 +11,7 @@ import {
   Spinner,
   Wrench,
 } from "@phosphor-icons/react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { BookingWizard } from "./booking-wizard"
 import { MathWidget } from "./math-widget"
@@ -26,7 +26,7 @@ interface ToolInvocationProps {
 }
 
 const TRANSITION = {
-  type: "spring",
+  type: "spring" as const,
   duration: 0.2,
   bounce: 0,
 }
