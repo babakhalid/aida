@@ -39,7 +39,7 @@ const addUTM = (url: string) => {
       return url // Return original URL for non-http(s) URLs
     }
 
-    u.searchParams.set("utm_source", "zola.chat")
+    u.searchParams.set("utm_source", "aida.chat")
     u.searchParams.set("utm_medium", "research")
     return u.toString()
   } catch (error) {
@@ -122,7 +122,7 @@ export function SourcesList({ sources, className }: SourcesListProps) {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={TRANSITION}
+            
               className="overflow-hidden"
             >
               <ul className="space-y-2 px-3 pt-3 pb-3">
