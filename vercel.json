@@ -3,18 +3,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 60
     }
-  },
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE": "@supabase_service_role",
-    "OPENAI_API_KEY": "@openai_api_key",
-    "MISTRAL_API_KEY": "@mistral_api_key",
-    "CSRF_SECRET": "@csrf_secret",
-    "EXA_API_KEY": "@exa_api_key",
-    "GOOGLE_GENERATIVE_AI_API_KEY": "@google_ai_api_key",
-    "ANTHROPIC_API_KEY": "@anthropic_api_key",
-    "XAI_API_KEY": "@xai_api_key",
-    "OPENROUTER_API_KEY": "@openrouter_api_key"
   }
 }
