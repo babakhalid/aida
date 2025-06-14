@@ -2,7 +2,7 @@ import { anthropic } from "@ai-sdk/anthropic"
 import { google } from "@ai-sdk/google"
 import { mistral } from "@ai-sdk/mistral"
 import { openai } from "@ai-sdk/openai"
-import type { LanguageModelV1 } from "@ai-sdk/provider"
+import type { LanguageModelV1 } from "ai"
 import { xai } from "@ai-sdk/xai"
 import { getProviderForModel } from "./provider-map"
 import type {
