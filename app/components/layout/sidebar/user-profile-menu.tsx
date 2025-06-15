@@ -258,7 +258,7 @@ export function UserProfileMenu({ user }: UserProfileMenuProps) {
           <DropdownMenuGroup>
             <DropdownMenuItem className="cursor-pointer" asChild>
               <a
-                href="https://github.com/ibelick/aida"
+                href="https://github.com/babakhalid/aida"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center"
